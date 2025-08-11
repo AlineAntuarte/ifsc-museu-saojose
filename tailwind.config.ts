@@ -10,21 +10,10 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        michroma: [
-          'var(--font-michroma)',
-          'Michroma',
-          'ui-monospace',
-          'monospace',
-        ],
-        magison: ['Magison', 'ui-serif', 'serif'],
-        worksans: [
-          'var(--font-work-sans)',
-          'Work Sans',
-          'ui-sans-serif',
-          'system-ui',
-          'sans-serif',
-        ],
-        ligconsolata: ['Ligconsolata', 'ui-monospace', 'monospace'],
+        michroma: ['Helvetica', 'Arial', 'sans-serif'],
+        magison: ['Helvetica', 'Arial', 'sans-serif'],
+        worksans: ['Helvetica', 'Arial', 'sans-serif'],
+        ligconsolata: ['Helvetica', 'Arial', 'sans-serif'],
       },
       colors: {
         gradientStart: '#DEBEFF',
