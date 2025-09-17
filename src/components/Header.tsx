@@ -14,7 +14,7 @@ export default function Header() {
     <header className="w-full sticky top-0 z-30 bg-primary">
       <div className="flex justify-between items-center py-4 px-6 text-primary-foreground bg-primary">
         <div className="flex items-center">
-          <a href="/">
+          <a href="/" className="flex items-center">
             <Image
               src="/imgs/logo.png"
               alt="Logo"
@@ -22,10 +22,10 @@ export default function Header() {
               height={128}
               className="mr-3"
             />
+            <span className="font-worksans font-bold drop-shadow text-lg pl-5 md:pl-0 md:text-2xl max-w-[280px]">
+              Museu Histórico <br /> de São José
+            </span>
           </a>
-          <span className="font-worksans font-bold drop-shadow text-lg pl-5 md:pl-0 md:text-2xl max-w-[280px]">
-            Museu Histórico <br /> de São José
-          </span>
         </div>
 
         {/* Navegação Desktop */}
