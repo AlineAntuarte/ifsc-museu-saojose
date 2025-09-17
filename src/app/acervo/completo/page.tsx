@@ -2,7 +2,6 @@
 
 import Footer from '@/components/Footer';
 import GallerySection from '@/components/GallerySection';
-import Header from '@/components/Header';
 
 export default function PaginaAcervoCompleto() {
   return (
@@ -12,7 +11,6 @@ export default function PaginaAcervoCompleto() {
     >
       <div className="relative min-h-screen flex flex-col items-center justify-center">
         <main className="w-full overflow-hidden m-auto">
-          <Header />
           <div className="w-full flex flex-col items-center justify-center mt-16 mb-12">
             <div className="bg-white/90 border border-gray-200 rounded-2xl shadow-md px-8 py-8 max-w-2xl text-center">
               <h1 className="text-4xl font-bold text-primary mb-4">

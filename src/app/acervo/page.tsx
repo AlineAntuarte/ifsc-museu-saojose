@@ -1,7 +1,6 @@
 import '../globals.css';
 import AcervoActions from '@/components/AcervoActions';
 import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import InteractiveCarousel, {
   type Item as CarouselItemData,
 } from '@/components/InteractiveCarousel';
@@ -36,7 +35,6 @@ export default async function AcervoPage() {
       style={{ backgroundColor: '#f2f2f2', color: '#111' }}
     >
       <main className="relative flex-1">
-        <Header />
         <section className="w-full min-h-screen flex flex-col items-center justify-start pt-20 pb-10">
           <div className="max-w-5xl w-full mx-auto px-6">
             <div className="bg-white/90 border border-gray-300 rounded-2xl shadow-lg shadow-gray-300/40 p-10 mb-12">

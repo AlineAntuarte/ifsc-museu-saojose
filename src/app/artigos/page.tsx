@@ -1,7 +1,6 @@
 'use client';
 
 import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import ItemEditor from '@/components/ItemEditor';
 import { useAdmin } from '@/contexts/AdminContext';
 import { Edit, FileText, Plus, Trash2 } from 'lucide-react';
@@ -123,7 +122,6 @@ export default function Artigos() {
         className="min-h-screen flex flex-col"
         style={{ backgroundColor: '#f2f2f2' }}
       >
-        <Header />
         <main className="flex-grow p-6 max-w-7xl mx-auto flex justify-center items-center">
           <p className="text-xl text-gray-700">Carregando artigos...</p>
         </main>
@@ -138,7 +136,6 @@ export default function Artigos() {
         className="min-h-screen flex flex-col"
         style={{ backgroundColor: '#f2f2f2' }}
       >
-        <Header />
         <main className="flex-grow p-6 max-w-7xl mx-auto flex justify-center items-center">
           <p className="text-xl">Nenhum Artigo encontrado.</p>
         </main>
@@ -152,8 +149,6 @@ export default function Artigos() {
       className="min-h-screen flex flex-col"
       style={{ backgroundColor: '#f2f2f2' }}
     >
-      <Header />
-
       <main className="flex-grow p-6 max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-center text-gray-800">

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import '../globals.css';
 import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 
 export default function Home() {
   const [modalContent, setModalContent] = useState('');
@@ -28,9 +27,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/65 z-0" />
 
         {/* NAVBAR FUNCIONAL */}
-        <div className="relative z-10">
-          <Header />
-        </div>
+        <div className="relative z-10"></div>
 
         {/* TÍTULO CENTRAL NO CABEÇALHO */}
         <div className="relative z-0 flex flex-col items-center justify-center h-full text-white text-center px-4 pb-14 ">
