@@ -31,6 +31,12 @@ export default function Header() {
         {/* Navegação Desktop */}
         <nav className="hidden md:flex space-x-[3vw] flex-grow justify-end items-center">
           <a
+            href="/"
+            className="font-worksans hover:text-accent hover:underline"
+          >
+            Início
+          </a>
+          <a
             href="/about"
             className="font-worksans hover:text-accent hover:underline"
           >
