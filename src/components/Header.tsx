@@ -94,7 +94,7 @@ export default function Header() {
               className="font-michroma text-primary-foreground"
               onClick={() => setIsMenuOpen(false)}
             >
-              Home
+              Início
             </a>
             <a
               href="/about"
