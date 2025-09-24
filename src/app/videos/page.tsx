@@ -1,6 +1,5 @@
 import '../globals.css';
 import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import VideoGallery from '@/components/VideoGallery';
 
 export default function Home() {
@@ -9,8 +8,6 @@ export default function Home() {
       className="flex flex-col min-h-screen"
       style={{ backgroundColor: '#f2f2f2' }}
     >
-      <Header />
-
       <section className="py-20 px-4 text-center">
         <div className="inline-block mx-auto p-8 rounded-2xl border border-gray-300 shadow-lg shadow-gray-200/60 bg-white/80">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 drop-shadow-lg text-black">

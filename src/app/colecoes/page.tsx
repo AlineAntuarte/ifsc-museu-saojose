@@ -1,5 +1,4 @@
 import Footer from '@/components/Footer';
-import Header from '@/components/Header';
 import InteractiveCarousel, {
   type Item as CarouselItemData,
 } from '@/components/InteractiveCarousel';
@@ -21,8 +20,6 @@ const mockIndigena: CarouselItemData[] = [
 export default function ColecoesPage() {
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden bg-[#222] text-white font-worksans">
-      <Header />
-
       <main className="flex-1 px-4 md:px-10">
         <section className="w-full pt-24 pb-16">
           <div className="text-center max-w-4xl mx-auto">
