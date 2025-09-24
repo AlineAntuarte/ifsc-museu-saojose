@@ -137,7 +137,7 @@ export default function Artigos() {
         style={{ backgroundColor: '#f2f2f2' }}
       >
         <main className="flex-grow p-6 max-w-7xl mx-auto flex justify-center items-center">
-          <p className="text-xl">Nenhum Artigo encontrado.</p>
+          <p className="text-xl text-gray-900">Nenhum Artigo encontrado.</p>
         </main>
         <Footer />
       </div>
