@@ -26,9 +26,6 @@ export default function Home() {
       >
         <div className="absolute inset-0 bg-black/65 z-0" />
 
-        {/* NAVBAR FUNCIONAL */}
-        <div className="relative z-10"></div>
-
         {/* TÍTULO CENTRAL NO CABEÇALHO */}
         <div className="relative z-0 flex flex-col items-center justify-center h-full text-white text-center px-4 pb-14 ">
           <h1 className="text-4xl font-bold">Museu de São José</h1>
