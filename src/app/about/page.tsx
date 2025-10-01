@@ -53,7 +53,7 @@ export default function Home() {
         <section className="max-w-4xl w-full bg-white p-6 rounded-xl flex flex-col md:flex-row items-center gap-6">
           {/* Mapa à esquerda (em telas médias para cima) */}
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3520.7614021730676!2d-48.63141538494484!3d-27.612236982832057!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x952738b6c6a39661%3A0x6beeea7a2577db5e!2sRua%20Hist%C3%B3rica%2C%20S%C3%A3o%20Jos%C3%A9%20-%20SC!5e0!3m2!1spt-BR!2sbr!4v1680206062241!5m2!1spt-BR!2sbr"
+            src="https://www.google.com/maps?q=-27.615690941617682,-48.62695004662651&z=16&output=embed"
             width="100%"
             height="300"
             className="md:w-1/2 rounded-lg border-0"
@@ -67,8 +67,8 @@ export default function Home() {
           <div className="w-full md:w-1/2 text-black text-center md:text-left">
             <h2 className="text-2xl font-bold mb-4">Localização</h2>
             <p className="text-lg">
-              Estamos localizados no coração de São José, na Rua Histórica nº
-              123, próximo à Praça Central. O acesso é fácil tanto para
+              Estamos localizados no coração de São José, R. Gaspar Neves, 3175
+              - Centro, próximo à Praça Central. O acesso é fácil tanto para
               pedestres quanto para quem vem de carro, com estacionamento
               disponível nas proximidades. A localização privilegiada oferece
               uma experiência cultural imersiva em um dos pontos mais charmosos
