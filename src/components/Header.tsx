@@ -28,47 +28,47 @@ export default function Header() {
           </a>
         </div>
 
-        {/* Navegação Desktop */}
-        <nav className="hidden md:flex space-x-[3vw] flex-grow justify-end items-center">
+        {/* Navegação Desktop  */}
+        <nav className="hidden [@media(min-width:1010px)]:flex space-x-[3vw] flex-grow justify-end items-center">
           <a
             href="/"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Início
           </a>
           <a
             href="/about"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Sobre
           </a>
           <a
             href="/colecoes"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Coleções Culturais
           </a>
           <a
             href="/acervo"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Acervo
           </a>
           <a
             href="/artigos"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Artigos
           </a>
           <a
             href="/tour"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Tour Virtual
           </a>
           <a
             href="/videos"
-            className="font-worksans hover:text-accent hover:underline"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
           >
             Nossos Videos
           </a>
@@ -78,7 +78,7 @@ export default function Header() {
         <button
           type="button"
           onClick={toggleMenu}
-          className="md:hidden block p-2 cursor-pointer z-30 text-primary-foreground"
+          className="[@media(max-width:1009px)]:block hidden p-2 cursor-pointer z-30 text-primary-foreground"
           aria-label="Menu"
         >
           <GiHamburgerMenu size={24} />
@@ -87,7 +87,7 @@ export default function Header() {
 
       {/* Menu Mobile */}
       {isMenuOpen && (
-        <div className="fixed inset-y-0 right-0 w-2/3 max-w-xs bg-primary z-50 p-6 flex flex-col">
+        <div className="fixed inset-y-0 right-0 w-2/3 max-w-xs bg-primary z-50 p-6 flex flex-col [@media(max-width:1009px)]:flex hidden">
           <nav className="flex flex-col space-y-4">
             <a
               href="/"
