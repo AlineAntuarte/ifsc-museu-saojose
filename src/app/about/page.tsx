@@ -27,7 +27,13 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/65 z-0" />
 
         {/* TÍTULO CENTRAL NO CABEÇALHO */}
-        <div className="relative z-0 flex flex-col items-center justify-center h-full text-white text-center px-4 pb-14 ">
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <div className="mt-30 bg-black/30 backdrop-blur-md border border-black/30 rounded-2xl shadow-2xl p-6 sm:p-10 max-w-2xl mx-auto text-left pointer-events-auto">
           <h1 className="text-4xl font-bold">Museu de São José</h1>
           <p className="text-lg mt-4 max-w-xl">
             Descubra a história e a cultura da nossa região em um ambiente
