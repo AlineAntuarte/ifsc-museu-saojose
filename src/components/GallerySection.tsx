@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import ColecaoSelector from './ColecaoSelector';
 import ItemEditor from './ItemEditor';
 import MediaCarousel from './MediaCarousel';
 
@@ -19,6 +20,7 @@ interface Item {
   img: string;
   text: string;
   descricao?: string;
+  colecao?: string | null;
 }
 
 interface AcervoItem {
@@ -47,6 +49,7 @@ interface ItemWithImages extends Item {
 
 export default function GallerySection() {
   const [items, setItems] = useState<ItemWithImages[]>([]);
+  const [colecaoFilter, setColecaoFilter] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
@@ -58,22 +61,21 @@ export default function GallerySection() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        // Buscar itens da galeria
-        const galleryResponse = await fetch('/api/gallery');
-        if (!galleryResponse.ok) {
-          throw new Error('Falha ao buscar itens da galeria');
+        const acervoResponse = await fetch('/api/acervo');
+        if (!acervoResponse.ok) {
+          throw new Error('Falha ao buscar itens do acervo');
         }
-        const galleryData = await galleryResponse.json();
 
-        // Para cada item, buscar suas mídias para criar o carrossel
+        const acervoData = await acervoResponse.json();
+
         const itemsWithImages = await Promise.all(
-          galleryData.map(async (item: Item) => {
+          acervoData.map(async (acervo: any) => {
             try {
               const mediasResponse = await fetch(
-                `/api/acervo/${item.id}/midias`,
+                `/api/acervo/${acervo.id}/midias`,
               );
 
-              let allImages = [item.img];
+              let allImages = [acervo.imagem || '/imgs/placeholder.jpg'];
               let totalMedias = 1;
 
               if (mediasResponse.ok) {
@@ -90,19 +92,27 @@ export default function GallerySection() {
               }
 
               return {
-                ...item,
+                id: acervo.id,
+                img: allImages[0],
+                text: acervo.titulo,
+                descricao: acervo.descricao,
+                colecao: acervo.colecao || null,
                 allImages,
                 totalMedias,
                 currentImageIndex: 0,
               };
             } catch (error) {
               console.error(
-                `Erro ao buscar mídias para item ${item.id}:`,
+                `Erro ao buscar mídias para item ${acervo.id}:`,
                 error,
               );
               return {
-                ...item,
-                allImages: [item.img],
+                id: acervo.id,
+                img: acervo.imagem || '/imgs/placeholder.jpg',
+                text: acervo.titulo,
+                descricao: acervo.descricao,
+                colecao: acervo.colecao || null,
+                allImages: [acervo.imagem || '/imgs/placeholder.jpg'],
                 totalMedias: 1,
                 currentImageIndex: 0,
               };
@@ -244,6 +254,10 @@ export default function GallerySection() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-gray-950">Filtrar por coleção</h1>
+        <ColecaoSelector value={colecaoFilter} onChange={setColecaoFilter} />
+      </div>
       <div className="flex justify-between items-center mb-12">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -291,124 +305,136 @@ export default function GallerySection() {
             </div>
           </div>
         ) : (
-          items.map((item) => {
-            const currentImage = item.allImages[item.currentImageIndex];
-            const hasMultipleImages = item.allImages.length > 1;
-            const hasMultipleMedias = item.totalMedias > 1;
+          items
+            .filter((it) => {
+              if (!colecaoFilter || colecaoFilter.trim() === '') return true;
+              return (it.colecao || '')
+                .toLowerCase()
+                .includes(colecaoFilter.toLowerCase());
+            })
+            .map((item) => {
+              const currentImage = item.allImages[item.currentImageIndex];
+              const hasMultipleImages = item.allImages.length > 1;
+              const hasMultipleMedias = item.totalMedias > 1;
 
-            return (
-              <button
-                type="button"
-                key={item.id}
-                className="group relative bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-left w-full"
-                onClick={() => handleViewItem(item)}
-              >
-                {/* Área da imagem com fundo preto */}
-                <div className="relative w-full aspect-square bg-black flex items-center justify-center p-4">
-                  <Image
-                    src={currentImage}
-                    alt={item.text}
-                    width={300}
-                    height={300}
-                    className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
-                    unoptimized
-                  />
+              return (
+                <button
+                  type="button"
+                  key={item.id}
+                  className="group relative bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 text-left w-full"
+                  onClick={() => handleViewItem(item)}
+                >
+                  {/* Área da imagem com fundo preto */}
+                  <div className="relative w-full aspect-square bg-black flex items-center justify-center p-4">
+                    <Image
+                      src={currentImage}
+                      alt={item.text}
+                      width={300}
+                      height={300}
+                      className="max-w-full max-h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                      unoptimized
+                    />
 
-                  {/* Navegação de imagens */}
-                  {hasMultipleImages && (
-                    <>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigateImage(item.id, 'prev');
-                        }}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <ChevronLeft size={16} />
-                      </button>
+                    {/* Navegação de imagens */}
+                    {hasMultipleImages && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigateImage(item.id, 'prev');
+                          }}
+                          className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <ChevronLeft size={16} />
+                        </button>
 
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigateImage(item.id, 'next');
-                        }}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <ChevronRight size={16} />
-                      </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigateImage(item.id, 'next');
+                          }}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <ChevronRight size={16} />
+                        </button>
 
-                      {/* Indicadores */}
-                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                        {item.allImages.map((_, index) => (
-                          <div
-                            key={`${item.id}-indicator-${index}`}
-                            className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                              index === item.currentImageIndex
-                                ? 'bg-white'
-                                : 'bg-white/50'
-                            }`}
-                          />
-                        ))}
+                        {/* Indicadores */}
+                        <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
+                          {item.allImages.map((_, index) => (
+                            <div
+                              key={`${item.id}-indicator-${index}`}
+                              className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                                index === item.currentImageIndex
+                                  ? 'bg-white'
+                                  : 'bg-white/50'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {/* Contador de mídias */}
+                    {hasMultipleMedias && (
+                      <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                        {hasMultipleImages
+                          ? `${item.currentImageIndex + 1}/${item.allImages.length}${item.totalMedias > item.allImages.length ? ` • ${item.totalMedias} total` : ''}`
+                          : `${item.totalMedias} mídias`}
                       </div>
-                    </>
-                  )}
+                    )}
 
-                  {/* Contador de mídias */}
-                  {hasMultipleMedias && (
-                    <div className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
-                      {hasMultipleImages
-                        ? `${item.currentImageIndex + 1}/${item.allImages.length}${item.totalMedias > item.allImages.length ? ` • ${item.totalMedias} total` : ''}`
-                        : `${item.totalMedias} mídias`}
-                    </div>
-                  )}
-
-                  {/* Controles admin */}
-                  {isAdmin && (
-                    <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditItem(item);
-                        }}
-                        className="text-foreground p-2 rounded-full shadow-lg bg-primary"
-                        title="Editar"
-                      >
-                        <Edit size={12} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteItem(item);
-                        }}
-                        className="text-foreground p-2 rounded-full shadow-lg bg-primary"
-                        title="Deletar"
-                      >
-                        <Trash2 size={12} />
-                      </button>
-                    </div>
-                  )}
-                </div>
-
-                {/* Área de informações */}
-                <div className="bg-white p-4 space-y-2">
-                  <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 mb-3">
-                    {item.text}
-                  </h3>
-                  <div className="text-xs text-gray-600 space-y-1">
-                    {item.descricao && (
-                      <p className="text-gray-600 text-xs mt-2 line-clamp-2">
-                        {item.descricao}
-                      </p>
+                    {/* Controles admin */}
+                    {isAdmin && (
+                      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity flex gap-1">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditItem(item);
+                          }}
+                          className="text-foreground p-2 rounded-full shadow-lg bg-primary"
+                          title="Editar"
+                        >
+                          <Edit size={12} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteItem(item);
+                          }}
+                          className="text-foreground p-2 rounded-full shadow-lg bg-primary"
+                          title="Deletar"
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     )}
                   </div>
-                </div>
-              </button>
-            );
-          })
+
+                  {/* Área de informações */}
+                  <div className="bg-white p-4 space-y-2">
+                    <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 mb-3">
+                      {item.text}
+                    </h3>
+                    {item.colecao && (
+                      <div className="text-xs text-gray-500 mb-2">
+                        Coleção: {item.colecao}
+                      </div>
+                    )}
+                    <div className="text-xs text-gray-600 space-y-1">
+                      {item.descricao && (
+                        <p className="text-gray-600 text-xs mt-2 line-clamp-2">
+                          {item.descricao}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              );
+            })
         )}
       </div>
 
@@ -440,24 +466,45 @@ export default function GallerySection() {
             }}
           />
         ) : (
-          <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center">
-            <div className="w-full h-full flex items-center justify-center text-white">
-              <div className="text-center">
-                <p className="text-xl mb-4">Nenhuma mídia disponível</p>
-                <p className="text-gray-300">{viewingItem.titulo}</p>
+          <dialog
+            open
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 w-full h-full"
+          >
+            <div
+              role="document"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              className="bg-white rounded-lg p-6 max-w-3xl w-full mx-4 overflow-y-auto max-h-[80vh]"
+            >
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {viewingItem.titulo}
+                </h2>
+              </div>
+              <Image
+                src={viewingItem.imagem || '/imgs/placeholder.jpg'}
+                alt={viewingItem.titulo}
+                width={800}
+                height={500}
+                className="w-full h-auto mb-4 rounded-md"
+              />
+              <div className="text-gray-700 text-base">
+                <p>{viewingItem.descricao || 'Conteúdo não disponível'}</p>
+              </div>
+              <div className="text-right mt-4">
                 <button
                   type="button"
                   onClick={() => {
                     setShowCarousel(false);
                     setViewingItem(null);
                   }}
-                  className="mt-4 px-4 py-2 bg-white/20 text-white rounded hover:bg-white/30 transition-colors"
+                  className="text-sm text-gray-600 hover:underline"
                 >
                   Fechar
                 </button>
               </div>
             </div>
-          </div>
+          </dialog>
         ))}
     </div>
   );
