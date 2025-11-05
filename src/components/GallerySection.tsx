@@ -466,24 +466,45 @@ export default function GallerySection() {
             }}
           />
         ) : (
-          <div className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center">
-            <div className="w-full h-full flex items-center justify-center text-white">
-              <div className="text-center">
-                <p className="text-xl mb-4">Nenhuma mídia disponível</p>
-                <p className="text-gray-300">{viewingItem.titulo}</p>
+          <dialog
+            open
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 w-full h-full"
+          >
+            <div
+              role="document"
+              onClick={(e) => e.stopPropagation()}
+              onKeyDown={(e) => e.stopPropagation()}
+              className="bg-white rounded-lg p-6 max-w-3xl w-full mx-4 overflow-y-auto max-h-[80vh]"
+            >
+              <div className="mb-4">
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {viewingItem.titulo}
+                </h2>
+              </div>
+              <Image
+                src={viewingItem.imagem || '/imgs/placeholder.jpg'}
+                alt={viewingItem.titulo}
+                width={800}
+                height={500}
+                className="w-full h-auto mb-4 rounded-md"
+              />
+              <div className="text-gray-700 text-base">
+                <p>{viewingItem.descricao || 'Conteúdo não disponível'}</p>
+              </div>
+              <div className="text-right mt-4">
                 <button
                   type="button"
                   onClick={() => {
                     setShowCarousel(false);
                     setViewingItem(null);
                   }}
-                  className="mt-4 px-4 py-2 bg-white/20 text-white rounded hover:bg-white/30 transition-colors"
+                  className="text-sm text-gray-600 hover:underline"
                 >
                   Fechar
                 </button>
               </div>
             </div>
-          </div>
+          </dialog>
         ))}
     </div>
   );
