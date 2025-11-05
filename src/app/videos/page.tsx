@@ -20,7 +20,7 @@ export default function Home() {
           </p>
           <div className="flex justify-center mt-8">
             <a
-              href="https://www.tiktok.com/@seudomuseu"
+              href="https://www.tiktok.com/@conexo.cultural"
               target="_blank"
               rel="noopener noreferrer"
               className="relative inline-flex items-center gap-2 px-6 py-3 bg-black text-[#25F4EE] font-semibold rounded-full border border-gray-300 shadow-md shadow-gray-400/40 hover:scale-105 transition-all duration-300"
