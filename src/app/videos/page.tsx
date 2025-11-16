@@ -46,6 +46,16 @@ export default function Home() {
         <h2 className="text-2xl font-bold text-center mb-8 text-primary text-worksans">
           Galeria de Vídeos
         </h2>
+        {/* {isAdmin && (
+          <button
+            type="button"
+            onClick={handleAddItem}
+            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded"
+          >
+            <Plus size={20} />
+            Adicionar Item
+          </button>
+        )} */}
         <VideoGallery />
       </section>
 
