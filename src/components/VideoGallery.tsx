@@ -1,6 +1,5 @@
 'use client';
-
-import { useEffect } from 'react';
+import ReactPlayer from 'react-player';
 
 export default function VideoGallery() {
   const videos = [
@@ -60,26 +59,23 @@ export default function VideoGallery() {
       id: '7387535726897876230',
     },
   ];
-
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://www.tiktok.com/embed.js';
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-7xl mx-auto">
       {videos.map((video) => (
-        <blockquote
+        <div
           key={video.id}
-          className="tiktok-embed"
-          cite={video.video}
-          data-video-id={video.id}
-          style={{ maxWidth: '325px', minWidth: '225px' }}
+          style={{ width: '100%', maxWidth: '325px', margin: '0 auto' }}
         >
-          <section>Loading...</section>
-        </blockquote>
+          <div style={{ position: 'relative', paddingTop: '177.78%' }}>
+            <ReactPlayer
+              src={video.video}
+              controls
+              width="100%"
+              height="100%"
+              style={{ position: 'absolute', top: 0, left: 0 }}
+            />
+          </div>
+        </div>
       ))}
     </div>
   );
