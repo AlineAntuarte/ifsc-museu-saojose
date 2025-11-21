@@ -1,6 +1,6 @@
 'use client';
 
-import { FileText, Save, Edit3 } from 'lucide-react';
+import { Edit3, FileText, Save } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface VideoItem {
@@ -20,12 +20,10 @@ export default function VideoEditor({
   onClose,
   onSave,
 }: VideoEditorProps) {
-
   const [formData, setFormData] = useState({
     video: '',
     descricao: '',
   });
-
 
   const isNewItem = !item || !item.id;
   const title = isNewItem ? 'Adicionar Novo Vídeo' : 'Editar Vídeo';
