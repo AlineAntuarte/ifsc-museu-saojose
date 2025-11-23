@@ -72,6 +72,12 @@ export default function Header() {
           >
             Nossos Videos
           </a>
+          <a
+            href="/jogos"
+            className="font-worksans hover:underline hover:bg-white/20 rounded px-4 py-3 transition-colors"
+          >
+            Nossos Jogos
+          </a>
         </nav>
 
         {/* Botão menu mobile */}
