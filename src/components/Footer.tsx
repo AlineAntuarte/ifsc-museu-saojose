@@ -68,14 +68,14 @@ const Footer = () => {
             </h2>
             <div className="flex space-x-4 mt-2">
               <a
-                href="https://www.instagram.com"
+                href="https://www.instagram.com/conexaocultural_sj"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <FaInstagram className="text-primary-foreground text-2xl hover:text-muted-foreground" />
               </a>
               <a
-                href="https://www.tiktok.com"
+                href="https://www.tiktok.com/@conexo.cultural"
                 target="_blank"
                 rel="noopener noreferrer"
               >
