@@ -169,12 +169,7 @@ export default function GallerySection() {
             return (
               <div
                 key={item.id}
-                style={{
-                  width: '100%',
-                  maxWidth: '360px',
-                  aspectRatio: '16/9',
-                  position: 'relative',
-                }}
+                style={{ position: 'relative', paddingTop: '177.78%' }}
               >
                 <ReactPlayer
                   src={item.video}
