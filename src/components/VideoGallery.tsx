@@ -1,201 +1,128 @@
 'use client';
 
 import { useAdmin } from '@/contexts/AdminContext';
-import { Image as ImageIcon, Plus } from 'lucide-react';
+import { Edit, Plus, Trash2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import ReactPlayer from 'react-player';
+import VideoEditor from './VideoEditor';
 
-interface Video {
+interface VideoEspecial {
   id: number;
-  ordem: number;
   titulo: string;
   video: string;
-  thumbnail: string;
-  tipo: string;
+  descricao?: string;
 }
 
 export default function GallerySection() {
-  const [items, setItems] = useState<Video[]>([]);
+  const [items, setItems] = useState<VideoEspecial[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [showEditor, setShowEditor] = useState(false);
-  const [editingItem, setEditingItem] = useState<Video | null>(null);
+  const [editingItem, setEditingItem] = useState<VideoEspecial | null>(null);
   const { isAdmin, token } = useAdmin();
 
   useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const videosResponse = await fetch('/api/videos');
-        if (!videosResponse.ok) {
-          throw new Error('Falha ao buscar vídeos');
-        }
-
-        const videosData = await videosResponse.json();
-
-        setItems(videosData);
-      } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : 'Erro desconhecido');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchItems();
+    fetch('/api/videos')
+      .then((res) => res.json())
+      .then((data) => setItems(data))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
-  const handleAddItem = () => {
-    setEditingItem(null);
-    setShowEditor(true);
+  const handleSaveItem = (savedItem: VideoEspecial) => {
+    if (editingItem) {
+      setItems((prev) =>
+        prev.map((i) => (i.id === savedItem.id ? savedItem : i)),
+      );
+    } else {
+      setItems((prev) => [savedItem, ...prev]);
+    }
   };
 
-  // const handleEditItem = async (item: Video) => {
-  //   try {
-  //     const [itemResponse, mediasResponse] = await Promise.all([
-  //       fetch(`/api/acervo/${item.id}`),
-  //       fetch(`/api/acervo/${item.id}/midias`),
-  //     ]);
+  const handleDeleteItem = async (id: number) => {
+    if (!token || !confirm('Confirmar exclusão?')) return;
+    const res = await fetch(`/api/videos/${id}`, {
+      method: 'DELETE',
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (res.ok) setItems((prev) => prev.filter((i) => i.id !== id));
+  };
 
-  //     if (itemResponse.ok) {
-  //       const itemCompleto = await itemResponse.json();
-  //       let midias: Media[] = [];
-
-  //       if (mediasResponse.ok) {
-  //         midias = await mediasResponse.json();
-  //       }
-
-  //       setEditingItem({ ...itemCompleto, midias });
-  //       setShowEditor(true);
-  //     }
-  //   } catch (error) {
-  //     console.error('Erro ao buscar item para edição:', error);
-  //   }
-  // };
-
-  // const handleDeleteItem = async (item: Item) => {
-  //   if (!token) return;
-
-  //   const confirmDelete = window.confirm(
-  //     `Tem certeza que deseja deletar "${item.text}"?`,
-  //   );
-
-  //   if (!confirmDelete) return;
-
-  //   try {
-  //     const response = await fetch(`/api/acervo/${item.id}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     if (response.ok) {
-  //       setItems(items.filter((i) => i.id !== item.id));
-  //     } else {
-  //       const errorData = await response.json();
-  //       alert(`Erro ao deletar: ${errorData.error}`);
-  //     }
-  //   } catch (error) {
-  //     console.error('Erro ao deletar item:', error);
-  //     alert('Erro ao deletar item');
-  //   }
-  // };
-
-  // const handleSaveItem = (savedItem: AcervoItem) => {
-  //   // Recarregar a galeria após salvar
-  //   window.location.reload();
-  // };
-
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-xl text-gray-600">Carregando videos...</div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="text-xl text-red-600">Erro: {error}</div>
-      </div>
-    );
-  }
+  if (loading) return <div className="p-8 text-center">Carregando...</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-12">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Galeria de Vídeos
-          </h1>
-        </div>
+        <h1 className="text-3xl font-bold">Galeria de Vídeos</h1>
         {isAdmin && (
+          // biome-ignore lint/a11y/useButtonType: <explanation>
           <button
-            type="button"
-            onClick={handleAddItem}
+            onClick={() => {
+              setEditingItem(null);
+              setShowEditor(true);
+            }}
             className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded"
           >
-            <Plus size={20} />
-            Adicionar Vídeo
+            <Plus size={20} /> Adicionar Vídeo
           </button>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-        {items.length === 0 ? (
-          <div className="col-span-full flex flex-col items-center justify-center py-16">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                <ImageIcon size={24} className="text-gray-400" />
-              </div>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                Nenhum vídeo no acervo
-              </h3>
-              <p className="text-gray-600 mb-4">Adicione vídeos</p>
-              {isAdmin && (
-                <button
-                  type="button"
-                  onClick={handleAddItem}
-                  className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors"
-                >
-                  <Plus size={16} />
-                  Adicionar Primeiro Vídeo
-                </button>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {items.map((item) => (
+          <div
+            key={item.id}
+            className="relative group bg-white rounded-lg shadow overflow-hidden"
+          >
+            <div className="w-full bg-black aspect-video relative">
+              <ReactPlayer
+                src={item.video}
+                width="100%"
+                height="100%"
+                controls
+              />
+            </div>
+
+            <div className="p-4">
+              <h3 className="font-bold truncate">{item.titulo}</h3>
+              {item.descricao && (
+                <p className="text-xs text-gray-500 line-clamp-2">
+                  {item.descricao}
+                </p>
               )}
             </div>
-          </div>
-        ) : (
-          items.map((item) => {
-            return (
-              <div
-                key={item.id}
-                style={{ position: 'relative', paddingTop: '177.78%' }}
-              >
-                <ReactPlayer
-                  src={item.video}
-                  width="100%"
-                  height="100%"
-                  style={{ position: 'absolute', top: 0, left: 0 }}
-                  controls
-                  key={item.id}
-                />
+
+            {isAdmin && (
+              <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+                <button
+                  onClick={() => {
+                    setEditingItem(item);
+                    setShowEditor(true);
+                  }}
+                  className="p-2 bg-blue-600 text-white rounded-full shadow"
+                >
+                  <Edit size={14} />
+                </button>
+                {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
+                <button
+                  onClick={() => handleDeleteItem(item.id)}
+                  className="p-2 bg-red-600 text-white rounded-full shadow"
+                >
+                  <Trash2 size={14} />
+                </button>
               </div>
-            );
-          })
-        )}
+            )}
+          </div>
+        ))}
       </div>
 
-      {/* {showEditor && (
-        <ItemEditor
-          item={editingItem || { id: 0, titulo: '' }}
-          type="acervo"
-          onClose={() => {
-            setShowEditor(false);
-            setEditingItem(null);
-          }}
+      {showEditor && (
+        <VideoEditor
+          item={editingItem}
+          onClose={() => setShowEditor(false)}
           onSave={handleSaveItem}
         />
-      )} */}
+      )}
     </div>
   );
 }
