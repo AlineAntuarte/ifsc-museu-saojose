@@ -67,17 +67,21 @@ export default function GallerySection() {
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {items.map((item) => (
           <div
             key={item.id}
-            className="relative group bg-white rounded-lg shadow overflow-hidden"
+            className="relative group bg-white rounded-lg shadow overflow-hidden mx-auto w-full max-w-[300px]"
           >
-            <div className="w-full bg-black aspect-video relative">
+            <div
+              className="w-full bg-black relative"
+              style={{ paddingTop: '177.78%' }}
+            >
               <ReactPlayer
                 src={item.video}
                 width="100%"
                 height="100%"
+                style={{ position: 'absolute', top: 0, left: 0 }}
                 controls
               />
             </div>
