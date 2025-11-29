@@ -1,18 +1,20 @@
 'use client';
 
-import { Edit3, FileText, Save } from 'lucide-react';
+import { useAdmin } from '@/contexts/AdminContext';
+import { Edit3, Save, Upload } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-interface VideoItem {
-  id: string;
+interface VideoEspecial {
+  id: number;
+  titulo: string;
   video: string;
   descricao?: string;
 }
 
 interface VideoEditorProps {
-  item: Partial<VideoItem> | null;
+  item: Partial<VideoEspecial> | null;
   onClose: () => void;
-  onSave: (item: VideoItem) => void;
+  onSave: (item: VideoEspecial) => void;
 }
 
 export default function VideoEditor({
@@ -20,119 +22,152 @@ export default function VideoEditor({
   onClose,
   onSave,
 }: VideoEditorProps) {
-  const [formData, setFormData] = useState({
-    video: '',
-    descricao: '',
-  });
+  const { token } = useAdmin();
+  const [titulo, setTitulo] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const isNewItem = !item || !item.id;
-  const title = isNewItem ? 'Adicionar Novo Vídeo' : 'Editar Vídeo';
 
   useEffect(() => {
     if (item) {
-      setFormData({
-        video: item.video || '',
-        descricao: item.descricao || '',
-      });
+      setTitulo(item.titulo || '');
+      setDescricao(item.descricao || '');
     } else {
-      setFormData({ video: '', descricao: '' });
+      setTitulo('');
+      setDescricao('');
+      setVideoFile(null);
     }
   }, [item]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!token) return;
 
-    onSave({
-      id: item?.id || new Date().toISOString(),
-      ...formData,
-    });
+    if (isNewItem && !videoFile) {
+      setError('Selecione um arquivo de vídeo');
+      return;
+    }
+
+    setLoading(true);
+    setError('');
+
+    try {
+      const formData = new FormData();
+      formData.append('titulo', titulo);
+      formData.append('descricao', descricao);
+      if (videoFile) {
+        formData.append('video', videoFile);
+      }
+
+      const url = isNewItem ? '/api/videos' : `/api/videos/${item.id}`;
+      const method = isNewItem ? 'POST' : 'PUT';
+
+      const res = await fetch(url, {
+        method,
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error('Erro ao salvar');
+
+      const savedItem = await res.json();
+      onSave(savedItem);
+      onClose();
+    } catch (err) {
+      setError('Falha ao salvar. Verifique o tamanho do arquivo.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-      <div className="bg-background border border-border rounded-lg shadow-xl max-w-2xl w-full max-h-[95vh] overflow-hidden">
+      <div className="bg-white border rounded-lg shadow-xl max-w-2xl w-full">
         <form onSubmit={handleSubmit}>
-          <div className="bg-card border-b border-border px-8 py-6">
-            <h2 className="text-3xl font-bold text-card-foreground flex items-center gap-3">
-              <Edit3 size={28} className="text-muted-foreground" />
-              {title}
+          <div className="border-b px-8 py-6">
+            <h2 className="text-2xl font-bold flex items-center gap-3">
+              <Edit3 /> {isNewItem ? 'Novo Vídeo (MP4)' : 'Editar Vídeo'}
             </h2>
           </div>
 
-          <div className="overflow-y-auto max-h-[calc(95vh-200px)] p-8 space-y-8">
-            <div className="bg-card border border-border rounded p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <FileText size={20} className="text-muted-foreground" />
-                <label
-                  htmlFor="video"
-                  className="text-base font-semibold text-card-foreground"
-                >
-                  Link do Vídeo
-                </label>
-                <span className="text-destructive text-sm">*</span>
-              </div>
+          <div className="p-8 space-y-6">
+            {error && (
+              <div className="text-red-500 bg-red-50 p-3 rounded">{error}</div>
+            )}
+
+            <div>
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
+              <label className="block text-sm font-medium mb-1">Título</label>
               <input
-                type="text"
-                id="video"
-                name="video"
-                value={formData.video}
-                onChange={handleChange}
+                value={titulo}
+                onChange={(e) => setTitulo(e.target.value)}
+                className="w-full border p-3 rounded"
                 required
-                className="w-full px-4 py-4 text-card-foreground bg-background border border-input rounded focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all text-lg"
-                placeholder="Cole o link do TikTok, YouTube, etc."
               />
             </div>
 
-            <div className="bg-card border border-border rounded p-6 shadow-sm">
-              <div className="flex items-center gap-3 mb-4">
-                <FileText size={20} className="text-muted-foreground" />
-                <label
-                  htmlFor="descricao"
-                  className="text-base font-semibold text-card-foreground"
-                >
-                  Descrição (Opcional)
-                </label>
+            <div>
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
+              <label className="block text-sm font-medium mb-1">
+                Arquivo de Vídeo (MP4)
+              </label>
+              <div className="border border-dashed p-6 rounded text-center cursor-pointer hover:bg-gray-50 relative">
+                <input
+                  type="file"
+                  accept="video/mp4"
+                  onChange={(e) => setVideoFile(e.target.files?.[0] || null)}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="flex flex-col items-center">
+                  <Upload className="text-gray-400 mb-2" />
+                  <span className="text-sm text-gray-600">
+                    {videoFile
+                      ? videoFile.name
+                      : item?.video
+                        ? 'Substituir vídeo atual'
+                        : 'Clique para selecionar'}
+                  </span>
+                </div>
               </div>
+              {!isNewItem && item?.video && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Atual: {item.video}
+                </p>
+              )}
+            </div>
+
+            <div>
+              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
+              <label className="block text-sm font-medium mb-1">
+                Descrição
+              </label>
               <textarea
-                id="descricao"
-                name="descricao"
-                value={formData.descricao}
-                onChange={handleChange}
-                rows={4}
-                className="w-full px-4 py-4 text-card-foreground bg-background border border-input rounded focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all resize-none"
-                placeholder="Uma breve descrição sobre o vídeo..."
+                value={descricao}
+                onChange={(e) => setDescricao(e.target.value)}
+                className="w-full border p-3 rounded"
+                rows={3}
               />
             </div>
           </div>
 
-          <div className="bg-muted/30 border-t border-border px-8 py-6">
-            <div className="flex items-center justify-end gap-4">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-6 py-3 border border-border text-muted-foreground transition-all font-medium"
-              >
-                Cancelar
-              </button>
-              <button
-                type="submit"
-                disabled={!formData.video.trim()}
-                className="flex items-center gap-3 bg-primary text-primary-foreground px-8 py-3 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium shadow-sm"
-              >
-                <Save size={18} />
-                Salvar Vídeo
-              </button>
-            </div>
+          <div className="border-t px-8 py-6 flex justify-end gap-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 border rounded"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="px-6 py-2 bg-blue-600 text-white rounded flex gap-2"
+            >
+              <Save size={18} /> {loading ? 'Enviando...' : 'Salvar'}
+            </button>
           </div>
         </form>
       </div>
