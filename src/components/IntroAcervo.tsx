@@ -23,7 +23,7 @@ export default function IntroAcervo() {
         {/* Texto à direita no desktop, embaixo no mobile */}
         <div className="w-full md:w-1/2 flex flex-col justify-center items-center md:items-start text-center md:text-left space-y-6">
           <h2 className="text-3xl md:text-4xl font-bold text-primary font-worksans drop-shadow mb-2">
-            Explore o Acervo Digital do Museu
+            Explore o Acervo 3D do Museu
           </h2>
           <p className="text-lg md:text-xl text-primary font-worksans">
             Descubra uma nova forma de interagir com a história! Nossa página de
@@ -43,14 +43,14 @@ export default function IntroAcervo() {
             <li>Experimente a tecnologia e mergulhe na cultura local</li>
           </ul>
           <a
-            href="/acervo"
+            href="http://extensaoads.sj.ifsc.edu.br:3001"
             className="w-full md:w-auto flex justify-center md:justify-start"
           >
             <button
               type="button"
               className="mt-4 bg-primary text-white px-8 py-4 rounded-xl text-lg font-bold shadow-md hover:bg-accent transition-all duration-300"
             >
-              Acesse nosso acervo
+              Acesse nosso acervo 3D
             </button>
           </a>
         </div>
