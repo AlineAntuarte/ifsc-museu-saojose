@@ -43,50 +43,53 @@ export default function SecondSection() {
           Artefatos Históricos
         </h2>
 
-        <div className="relative w-full">
-          <Carousel setApi={setApi} className="w-full overflow-hidden">
-            <CarouselContent className="flex transition-transform ease-in-out">
-              {[
-                '/imgs/img4.jpg',
-                '/imgs/img2.jpg',
-                '/imgs/img6.jpg',
-                '/imgs/card1.png',
-                '/imgs/img8.jpg',
-                '/imgs/img24.JPG',
-              ].map((src, index) => (
-                <CarouselItem
-                  key={`slide-image-${src}`}
-                  className="w-full md:w-1/2 flex justify-center items-center px-2"
-                >
-                  <Image
-                    width={1920}
-                    height={1080}
-                    src={src}
-                    alt={`Card ${index + 1}`}
-                    className="rounded-xl object-cover w-full h-[180px] sm:h-[300px] md:h-[400px] lg:h-[500px]"
-                  />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-          </Carousel>
+       <div className="relative w-full">
+         <Carousel setApi={setApi} className="w-full overflow-hidden">
+           <CarouselContent className="flex">
+             {[
+               '/imgs/img4.jpg',
+               '/imgs/img2.jpg',
+               '/imgs/img6.jpg',
+               '/imgs/card1.png',
+               '/imgs/img8.jpg',
+               '/imgs/img24.JPG',
+             ].map((src, index) => (
+               <CarouselItem
+                 key={`slide-image-${src}`}
+                 className="basis-full flex justify-center items-center"
+               >
+                 <div className="w-full max-w-5xl px-4 sm:px-6 md:px-12 lg:px-20 rounded-2xl overflow-hidden">
+                   <Image
+                     width={1920}
+                     height={1080}
+                     src={src}
+                     alt={`Card ${index + 1}`}
+                     className="w-full h-[200px] sm:h-[300px] md:h-[450px] lg:h-[600px] object-cover mx-auto rounded-lg
+                     "
+                   />
+                 </div>
+               </CarouselItem>
+             ))}
+           </CarouselContent>
+         </Carousel>
 
-          <button
-            type="button"
-            onClick={handlePrev}
-            aria-label="Anterior"
-            className="absolute top-1/2 left-2 md:left-[-50px] transform -translate-y-1/2 bg-primary-foreground text-black rounded-full p-2 md:p-3 shadow-md hover:bg-accent transition focus:outline-none focus:ring-2 focus:ring-white"
-          >
-            <ChevronLeft size={24} />
-          </button>
-          <button
-            type="button"
-            onClick={handleNext}
-            aria-label="Próximo"
-            className="absolute top-1/2 right-2 md:right-[-50px] transform -translate-y-1/2 bg-primary-foreground text-black rounded-full p-2 md:p-3 shadow-md hover:bg-accent transition focus:outline-none focus:ring-2 focus:ring-white"
-          >
-            <ChevronRight size={24} />
-          </button>
-        </div>
+         <button
+           type="button"
+           onClick={handlePrev}
+           aria-label="Anterior"
+           className="absolute top-1/2 left-2 md:left-[-50px] transform -translate-y-1/2 bg-primary-foreground text-black rounded-full p-2 md:p-3 shadow-md hover:bg-accent transition focus:outline-none focus:ring-2 focus:ring-white"
+         >
+           <ChevronLeft size={24} />
+         </button>
+         <button
+           type="button"
+           onClick={handleNext}
+           aria-label="Próximo"
+           className="absolute top-1/2 right-2 md:right-[-30px] transform -translate-y-1/2 bg-primary-foreground text-black rounded-full p-2 md:p-3 shadow-md hover:bg-accent transition focus:outline-none focus:ring-2 focus:ring-white"
+         >
+           <ChevronRight size={24} />
+         </button>
+       </div>
 
         <div className="flex justify-center items-center mt-6 space-x-2 md:space-x-3">
           {Array.from({ length: totalSlides }).map((_, index) => {
