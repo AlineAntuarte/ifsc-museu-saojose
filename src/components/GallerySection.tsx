@@ -26,11 +26,48 @@ interface Item {
 interface AcervoItem {
   id: number;
   titulo: string;
+  nome?: string;
+  numeroInventario?: string;
+
   descricao?: string;
+  conteudo?: string;
+  contextoHistorico?: string;
+
+  artista?: string;
   colecao?: string;
-  ordem?: number;
+  tags?: string;
+  localizacao?: string;
+  periodo?: string;
+
+  dataProducao?: string;
+  material?: string;
+  tecnica?: string;
+
+  altura?: string;
+  largura?: string;
+  profundidade?: string;
+
+  cidadeOrigem?: string;
+  estadoOrigem?: string;
+  paisOrigem?: string;
+
+  doador?: string;
+  formaAquisicao?: string;
+  estadoConservacao?: string;
+
   imagem?: string;
+  imagemCapa?: string;
+  fotosAdicionais?: string;
   midias?: Media[];
+
+  textosDrive?: string;
+  linkDrive?: string;
+  outrasFontes?: string;
+
+  ordem?: number;
+  ativo?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 interface Media {
@@ -365,11 +402,10 @@ export default function GallerySection() {
                           {item.allImages.map((_, index) => (
                             <div
                               key={`${item.id}-indicator-${index}`}
-                              className={`w-1.5 h-1.5 rounded-full transition-colors ${
-                                index === item.currentImageIndex
-                                  ? 'bg-white'
-                                  : 'bg-white/50'
-                              }`}
+                              className={`w-1.5 h-1.5 rounded-full transition-colors ${index === item.currentImageIndex
+                                ? 'bg-white'
+                                : 'bg-white/50'
+                                }`}
                             />
                           ))}
                         </div>
@@ -480,17 +516,122 @@ export default function GallerySection() {
                 <h2 className="text-2xl font-bold text-gray-800">
                   {viewingItem.titulo}
                 </h2>
+                {viewingItem.numeroInventario && (
+                  <p className="text-sm text-gray-500">
+                    Inventário: {viewingItem.numeroInventario}
+                  </p>
+                )}
               </div>
+
               <Image
-                src={viewingItem.imagem || '/imgs/placeholder.jpg'}
+                src={viewingItem.imagemCapa || viewingItem.imagem || "/imgs/placeholder.jpg"}
                 alt={viewingItem.titulo}
                 width={800}
                 height={500}
-                className="w-full h-auto mb-4 rounded-md"
+                className="w-full h-auto mb-6 rounded-md"
               />
-              <div className="text-gray-700 text-base">
-                <p>{viewingItem.descricao || 'Conteúdo não disponível'}</p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700 mb-6">
+                {viewingItem.artista && (
+                  <p><strong>Artista:</strong> {viewingItem.artista}</p>
+                )}
+                {viewingItem.colecao && (
+                  <p><strong>Coleção:</strong> {viewingItem.colecao}</p>
+                )}
+                {viewingItem.localizacao && (
+                  <p><strong>Localização:</strong> {viewingItem.localizacao}</p>
+                )}
+                {viewingItem.periodo && (
+                  <p><strong>Período:</strong> {viewingItem.periodo}</p>
+                )}
+                {viewingItem.material && (
+                  <p><strong>Material:</strong> {viewingItem.material}</p>
+                )}
+                {viewingItem.tecnica && (
+                  <p><strong>Técnica:</strong> {viewingItem.tecnica}</p>
+                )}
+                {viewingItem.dataProducao && (
+                  <p><strong>Data de produção:</strong> {viewingItem.dataProducao}</p>
+                )}
+                {viewingItem.estadoConservacao && (
+                  <p><strong>Estado de conservação:</strong> {viewingItem.estadoConservacao}</p>
+                )}
               </div>
+
+              {(viewingItem.altura || viewingItem.largura || viewingItem.profundidade) && (
+                <div className="mb-4 text-sm text-gray-700">
+                  <h3 className="font-semibold mb-1">Dimensões</h3>
+                  <p>
+                    {viewingItem.altura && `Altura: ${viewingItem.altura} `}
+                    {viewingItem.largura && `| Largura: ${viewingItem.largura} `}
+                    {viewingItem.profundidade && `| Profundidade: ${viewingItem.profundidade}`}
+                  </p>
+                </div>
+              )}
+
+              {(viewingItem.cidadeOrigem ||
+                viewingItem.estadoOrigem ||
+                viewingItem.paisOrigem) && (
+                  <div className="mb-4 text-sm text-gray-700">
+                    <h3 className="font-semibold mb-1">Local de origem</h3>
+                    <p>
+                      {[viewingItem.cidadeOrigem, viewingItem.estadoOrigem, viewingItem.paisOrigem]
+                        .filter(Boolean)
+                        .join(" - ")}
+                    </p>
+                  </div>
+                )}
+
+              {viewingItem.tags && (
+                <div className="mb-6">
+                  <h3 className="font-semibold text-sm mb-2 text-gray-700">Tags</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {viewingItem.tags.split(",").map((tag: string, index: number) => (
+                      <span
+                        key={index}
+                        className="bg-gray-200 text-gray-700 text-xs px-2 py-1 rounded"
+                      >
+                        {tag.trim()}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="text-gray-700 text-base mb-6">
+                <h3 className="font-semibold mb-2">Contexto histórico</h3>
+                <p className="whitespace-pre-line">
+                  {viewingItem.contextoHistorico ||
+                    viewingItem.conteudo ||
+                    "Conteúdo não disponível"}
+                </p>
+              </div>
+
+              {(viewingItem.textosDrive || viewingItem.linkDrive) && (
+                <div className="text-sm text-gray-700 mb-6">
+                  <h3 className="font-semibold mb-2">Documentos</h3>
+
+                  {viewingItem.textosDrive && (
+                    <p>
+                      <strong>Textos:</strong> {viewingItem.textosDrive}
+                    </p>
+                  )}
+
+                  {viewingItem.linkDrive && (
+                    <p>
+                      <a
+                        href={viewingItem.linkDrive}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Acessar Google Drive
+                      </a>
+                    </p>
+                  )}
+                </div>
+              )}
+
               <div className="text-right mt-4">
                 <button
                   type="button"
