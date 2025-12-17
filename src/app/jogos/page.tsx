@@ -48,7 +48,7 @@ export default function Jogos() {
   // Página com cards bonitos
   return (
     <div className="min-h-screen p-8 bg-gradient-to-b from-white to-gray-100">
-      <h1 className="text-4xl font-extrabold text-center mb-10">
+      <h1 className="text-4xl font-extrabold text-center mb-10 text-gray-800">
         🎮 Escolha seu jogo
       </h1>
 
