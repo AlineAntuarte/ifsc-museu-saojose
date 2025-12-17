@@ -603,6 +603,7 @@ export default function GallerySection() {
                 <p className="whitespace-pre-line">
                   {viewingItem.contextoHistorico ||
                     viewingItem.conteudo ||
+                    viewingItem.descricao ||
                     "Conteúdo não disponível"}
                 </p>
               </div>
