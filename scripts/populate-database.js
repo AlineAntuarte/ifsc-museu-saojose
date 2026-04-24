@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const fs = require('node:fs');
 const path = require('node:path');
-
+const generator = require("generate-password");
 const prisma = new PrismaClient();
 
 async function main() {
@@ -11,7 +11,16 @@ async function main() {
   try {
     // 1. Criar usuário admin
     console.log('👤 Criando usuário administrador...');
-    const adminPassword = 'YqiKMpX5DdK2f';
+
+
+    const senha = generator.generate({
+      length: 12,
+      numbers: true,
+      symbols: true,
+      uppercase: true,
+      lowercase: true
+    });
+    const adminPassword = `batatinha+${senha}` ;
     const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     const admin = await prisma.usuario.upsert({
