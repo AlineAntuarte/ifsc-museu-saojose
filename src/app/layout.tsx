@@ -4,6 +4,7 @@ import { AdminProvider } from '@/contexts/AdminContext';
 import type { Metadata } from 'next';
 import { Michroma, Work_Sans } from 'next/font/google';
 import type { ReactNode } from 'react';
+import Translate from '@/components/Language';
 
 const michroma = Michroma({
   weight: '400',
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR" className={`${michroma.variable} ${workSans.variable}`}>
       <body className="bg-background text-white font-worksans">
         <AdminProvider>
+          <Translate />
           <Header />
           {children}
         </AdminProvider>

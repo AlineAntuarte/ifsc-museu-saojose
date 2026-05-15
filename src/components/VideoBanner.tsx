@@ -21,7 +21,7 @@ const VideoBanner: React.FC<VideoBannerProps> = ({
     muted
     loop
     playsInline
-  />
+    />
 );
 
 export default VideoBanner;
