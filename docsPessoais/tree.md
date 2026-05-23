@@ -1,9 +1,6 @@
 # tree
 
 ```tree
-PS C:\ifsc-museu-saojose> tree /f /a
-Listagem de caminhos de pasta
-O número de série do volume é 00000022 7A26:92B9
 C:.
 |   .dockerignore
 |   .env.example
@@ -20,7 +17,6 @@ C:.
 |   postcss.config.mjs
 |   README.md
 |   tailwind.config.ts
-|   tree.md
 |   tsconfig.json
 |   yarn.lock
 |
@@ -42,6 +38,11 @@ C:.
 |       tailwindcss.md
 |       threejs.md
 |       typescript.md
+|
++---docsPessoais
+|       COMMITS_SEMANTICOS.md
+|       GuiaGit.md
+|       tree.md
 |
 +---prisma
 |   |   schema.prisma
@@ -801,6 +802,4 @@ C:.
             middleware.ts
             prisma.ts
             utils.ts
-
-PS C:\ifsc-museu-saojose>  
 ```
