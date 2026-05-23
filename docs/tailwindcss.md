@@ -28,14 +28,14 @@ Cada classe representa uma regra de CSS, como:
 
 ## 🚀 Iniciando um projeto
 
-### Instalação via npm:
+### Instalação via npm
 
 ```bash
 npm install -D tailwindcss
 npx tailwindcss init
 ```
 
-### Arquivo CSS base:
+### Arquivo CSS base
 
 ```css
 @tailwind base;
@@ -43,7 +43,7 @@ npx tailwindcss init
 @tailwind utilities;
 ```
 
-### Compilação com CLI:
+### Compilação com CLI
 
 ```bash
 npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
@@ -60,7 +60,7 @@ npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch
 
 ---
 
-## 📦 Exemplo de botão:
+## 📦 Exemplo de botão
 
 ```html
 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">

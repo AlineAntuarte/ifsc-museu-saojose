@@ -4,7 +4,7 @@
 
 TypeScript é um superconjunto do JavaScript criado pela Microsoft que adiciona **tipagem estática**. Isso significa que você pode declarar os tipos das variáveis, argumentos e retornos das funções.
 
-### Exemplo básico:
+### Exemplo básico
 
 ```ts
 function soma(a: number, b: number): number {

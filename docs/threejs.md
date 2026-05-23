@@ -18,19 +18,19 @@ Você pode criar visualizações interativas, jogos, simulações e muito mais d
 
 ## 🚀 Criando seu primeiro projeto
 
-### Instalação via npm:
+### Instalação via npm
 
 ```bash
 npm install three
 ```
 
-### Ou via CDN:
+### Ou via CDN
 
 ```html
 <script src="https://unpkg.com/three@latest/build/three.min.js"></script>
 ```
 
-### Exemplo básico:
+### Exemplo básico
 
 ```js
 const scene = new THREE.Scene();
