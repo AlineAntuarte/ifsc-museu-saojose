@@ -22,9 +22,10 @@ services:
     image: mysql:latest
     container_name: my_mysql_site
     environment:
-      - MYSQL_ROOT_PASSWORD=${MY_SECRET_PW}
-      - MYSQL_DATABASE=${MY_DATABASE}
-      - MYSQL_PASSWORD=${MY_SECRET_PW}
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: database_museu
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
     ports:
       - "3306:3306"
     volumes:
